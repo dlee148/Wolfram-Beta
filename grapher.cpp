@@ -5,17 +5,21 @@ using namespace std;
 
 void fillGraph(char graph[][51]);
 void drawAxes(char graph[][51]);
+void getCoefficients(int coefficients[], int degree);
+void draw(int coefficients[], int degree, char graph[][51]);
 
 int main() {
     char graph[51][51];
     fillGraph(graph);
     drawAxes(graph);
-    for (int i = 0; i < 51; ++i) {
-        for (int j = 0; j < 51; ++j) {
-            cout << graph[i][j];
-        }
-        cout << endl;
-    }
+    
+    int degree = 0;
+    int coefficients[10];
+    cout << "What is the degree of the function? ";
+    cin >> degree;
+    
+    getCoefficients(coefficients, degree);
+    draw(coefficients, degree, graph);
 }
 
 void fillGraph(char graph[][51]) {
@@ -39,4 +43,18 @@ void drawAxes(char graph[][51]) {
     }
     graph[0][25] = '^';
     graph[50][25] = 'v';
+}
+
+void getCoefficients(int coefficients[], int degree) {
+    for (int i = 0; i < degree; ++i) {
+        cout << "What is the coefficient of the term of degree " << i + 1 << "?" << endl;
+        int co = 0;
+        cin >> co;
+        coefficients[i] = co;
+    }
+}
+
+void draw(int coefficients[], int degree, char graph[][51]) {
+    // todo: implement
+    return;
 }
