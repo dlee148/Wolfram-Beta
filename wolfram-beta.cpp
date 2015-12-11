@@ -47,7 +47,7 @@ void drawAxes(char graph[][51]) {
 
 void getCoefficients(int coefficients[], int degree) {
     for (int i = 0; i < degree; ++i) {
-        cout << "What is the coefficient of the term of degree " << i + 1 << "?" << endl;
+        cout << "What is the coefficient of the term of degree " << i + 1 << "? ";
         int co = 0;
         cin >> co;
         coefficients[i] = co;
@@ -55,6 +55,20 @@ void getCoefficients(int coefficients[], int degree) {
 }
 
 void draw(int coefficients[], int degree, char graph[][51]) {
-    // todo: implement
-    return;
+    for (int i = 0; i < 51; ++i) {
+        int pos = 0;
+        for (int j = 0; j < degree; ++j) {
+            pos += coefficients[j] * pow(i - 25, j + 1);
+        }
+        if (pos < 26 && pos > -26) {
+            graph[25 - pos][i] = '*';
+        }
+    }
+    
+    for (int k = 0; k < 51; ++k) {
+        for (int l = 0; l < 51; ++l) {
+            cout << graph[k][l];
+        }
+        cout << endl;
+    }
 }
