@@ -39,6 +39,8 @@ public:
     //Accessor
     double degree();
     double coeff();
+    //Mutator
+    void changeDegree(int newDegree);
 private:
     double m_degree;
     double m_coeff;
@@ -57,6 +59,10 @@ double Term::coeff() {
     return m_coeff;
 }
 
+void Term::changeDegree(int newDegree) {
+    m_degree = newDegree;
+}
+
 // Function class definition and member functions
 
 class Function {
@@ -67,6 +73,7 @@ public:
     //Mutators
     void takeInput();
     void calculateValues();
+    void sortTerms();
     //Accessors
     Term* terms(int index);
     double* values();
@@ -85,6 +92,7 @@ Function::Function() {
     cin >> m_userTerms;
     takeInput();
     calculateValues();
+    sortTerms();
 }
 
 Function::~Function() {
@@ -121,6 +129,23 @@ void Function::calculateValues() {
     }
 }
 
+void Function::sortTerms() {
+    int counter = 0;
+    while (counter < m_nTerms - 1) {
+        counter = 0;
+        for (int i = 0; i < m_nTerms - 1; ++i) {
+            if (m_terms[i]->degree() < m_terms[i + 1]->degree()) {
+                int tmp = m_terms[i]->degree();
+                m_terms[i]->changeDegree(m_terms[i + 1]->degree());
+                m_terms[i + 1]->changeDegree(tmp);
+            }
+            else {
+                ++counter;
+            }
+        }
+    }
+}
+
 Term* Function::terms(int index) {
     return m_terms[index];
 }
@@ -132,13 +157,6 @@ double* Function::values() {
 int Function::nTerms() {
     return m_nTerms;
 }
-
-/*
- plus sign if it's not the first term
- coefficient if it's not 1
- x if it's not to the 0 power
- ^y if it's not to the 1 power
-*/
 
 void Function::displayFunction() {
     for (int i = 0; i < m_nTerms; ++i) {
