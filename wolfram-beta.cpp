@@ -135,9 +135,9 @@ void Function::sortTerms() {
         counter = 0;
         for (int i = 0; i < m_nTerms - 1; ++i) {
             if (m_terms[i]->degree() < m_terms[i + 1]->degree()) {
-                int tmp = m_terms[i]->degree();
-                m_terms[i]->changeDegree(m_terms[i + 1]->degree());
-                m_terms[i + 1]->changeDegree(tmp);
+                Term* tmp = m_terms[i];
+                m_terms[i] = m_terms[i + 1];
+                m_terms[i + 1] = tmp;
             }
             else {
                 ++counter;
@@ -166,7 +166,15 @@ void Function::displayFunction() {
         if (terms(i)->coeff() == 1 && terms(i)->degree() == 0) {
             cout << "1";
         }
-        if (terms(i)->coeff() != 1) {
+        if (terms(i)->coeff() == -1) {
+            if (terms(i)->degree() != 0) {
+                cout << "-";
+            }
+            else {
+                cout << "-1";
+            }
+        }
+        if (terms(i)->coeff() != 1 && terms(i)->coeff() != -1) {
             cout << terms(i)->coeff();
         }
         if (terms(i)->degree() != 0) {
