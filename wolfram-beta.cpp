@@ -36,11 +36,11 @@ class Term {
 public:
     // Constructor
     Term(double degree, double coeff);
-    //Accessor
+    // Accessor
     double degree();
     double coeff();
-    //Mutator
-    void changeDegree(int newDegree);
+    // Mutator
+    void addCoeff(int coeff);
 private:
     double m_degree;
     double m_coeff;
@@ -59,8 +59,8 @@ double Term::coeff() {
     return m_coeff;
 }
 
-void Term::changeDegree(int newDegree) {
-    m_degree = newDegree;
+void Term::addCoeff(int coeff) {
+    m_coeff += coeff;
 }
 
 // Function class definition and member functions
@@ -70,11 +70,12 @@ public:
     // Constructor/destructor
     Function();
     ~Function();
-    //Mutators
+    // Mutators
     void takeInput();
-    void calculateValues();
     void sortTerms();
-    //Accessors
+    void combineLikeTerms();
+    void calculateValues();
+    // Accessors
     Term* terms(int index);
     double* values();
     int nTerms();
@@ -91,8 +92,9 @@ Function::Function() {
     cout << "How many terms are in your function? ";
     cin >> m_userTerms;
     takeInput();
-    calculateValues();
     sortTerms();
+    combineLikeTerms();
+    calculateValues();
 }
 
 Function::~Function() {
@@ -141,6 +143,24 @@ void Function::sortTerms() {
             }
             else {
                 ++counter;
+            }
+        }
+    }
+}
+
+// todo: fix this function
+
+void Function::combineLikeTerms() {
+    int counter = 0;
+    while (counter > 0) {
+        for (int i = 0; i < m_nTerms - 1; ++i) {
+            if (terms(i)->degree() == terms(i + 1)->degree()) {
+                terms(i)->addCoeff(terms(i + 1)->coeff());
+                delete terms(i + 1);
+                for (int j = i + 1; j < m_nTerms; ++j) {
+                    terms(j) = terms(j + 1);
+                }
+                --m_nTerms;
             }
         }
     }
