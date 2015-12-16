@@ -75,6 +75,7 @@ public:
     void sortTerms();
     void combineLikeTerms();
     void calculateValues();
+    void changeAddress(int startingIndex, int endingIndex);
     // Accessors
     Term* terms(int index);
     double* values();
@@ -157,13 +158,18 @@ void Function::combineLikeTerms() {
                 ++counter;
                 terms(i)->addCoeff(terms(i + 1)->coeff());
                 delete terms(i + 1);
-                for (int j = i; j < m_nTerms - 1; ++j) {
-                    terms[j] = terms[j + 1];
+                for (int j = i + 1; j < m_nTerms - 1; ++j) {
+                    changeAddress(j, j + 1);
                 }
                 --m_nTerms;
+                break;
             }
         }
     }
+}
+
+void Function::changeAddress(int startingIndex, int endingIndex) {
+    m_terms[startingIndex] = m_terms[endingIndex];
 }
 
 Term* Function::terms(int index) {
@@ -203,7 +209,9 @@ void Function::displayFunction() {
         if (terms(i)->degree() != 1 && terms(i)->degree() != 0) {
             cout << "^" << terms(i)->degree();
         }
-        cout << " ";
+        if ( i != m_nTerms - 1) {
+            cout << " ";
+        }
     }
     cout << endl;
 }
