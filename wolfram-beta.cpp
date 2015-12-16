@@ -40,7 +40,7 @@ public:
     double degree();
     double coeff();
     // Mutator
-    void addCoeff(int coeff);
+    void addCoeff(double coeff);
 private:
     double m_degree;
     double m_coeff;
@@ -59,7 +59,7 @@ double Term::coeff() {
     return m_coeff;
 }
 
-void Term::addCoeff(int coeff) {
+void Term::addCoeff(double coeff) {
     m_coeff += coeff;
 }
 
@@ -148,17 +148,17 @@ void Function::sortTerms() {
     }
 }
 
-// todo: fix this function
-
 void Function::combineLikeTerms() {
-    int counter = 0;
+    int counter = 1;
     while (counter > 0) {
+        counter = 0;
         for (int i = 0; i < m_nTerms - 1; ++i) {
             if (terms(i)->degree() == terms(i + 1)->degree()) {
+                ++counter;
                 terms(i)->addCoeff(terms(i + 1)->coeff());
                 delete terms(i + 1);
-                for (int j = i + 1; j < m_nTerms; ++j) {
-                    terms(j) = terms(j + 1);
+                for (int j = i; j < m_nTerms - 1; ++j) {
+                    terms[j] = terms[j + 1];
                 }
                 --m_nTerms;
             }
