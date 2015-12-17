@@ -216,6 +216,65 @@ void Function::displayFunction() {
     cout << endl;
 }
 
+// Axes class definition and member functions
+
+class Axes {
+public:
+    // Constructor and destructor
+    Axes();
+    ~Axes();
+    // Mutators
+    void fillGraph();
+    void determineMax();
+    void determineMin();
+    void setScale();
+    void drawAxes();
+    void drawGraph();
+    void displayGraph();
+private:
+    Function* m_function;
+    char m_graph[51][51];
+    double m_max;
+    double m_min;
+    double m_scale;
+};
+
+Axes::Axes() {
+    return;
+}
+
+Axes::~Axes() {
+    return;
+}
+
+void fillGraph() {
+    return;
+}
+
+void determineMax() {
+    return;
+}
+
+void determineMin() {
+    return;
+}
+
+void setScale() {
+    return;
+}
+
+void drawAxes() {
+    return;
+}
+
+void drawGraph() {
+    return;
+}
+
+void displayGraph() {
+    return;
+}
+
 /*
  ====================================
  Auxiliary functions and main routine
