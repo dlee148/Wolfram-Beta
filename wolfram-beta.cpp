@@ -125,7 +125,21 @@ void Function::takeInput() {
 }
 
 void Function::calculateValues() {
-    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
+    int maxDegree = 0;
+    for (int k = 0; k < m_nTerms; ++k) {
+        if (fabs(terms(k)->degree()) > maxDegree) {
+            maxDegree = fabs(terms(k)->degree());
+        }
+    }
+    
+    int startingIndex = 0;
+    /*
+    
+    if maxDegree < 1 and the number after the decimal is odd, startingIndex should be 25
+    if maxDegree is negative, the number 0 should be skipped in calculations
+    
+    */
+    for (int i = startingIndex; i < GRAPH_DIMENSIONS; ++i) {
         double value = 0;
         for (int j = 0; j < m_nTerms; ++j) {
             value += (m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree()));
@@ -244,7 +258,10 @@ private:
 Axes::Axes() {
     m_function = new Function;
     fillGraph();
-    
+    determineMax();
+    determineMin();
+    setScale();
+    cout << m_scale;
 }
 
 Axes::~Axes() {
@@ -253,7 +270,7 @@ Axes::~Axes() {
 
 void Axes::fillGraph() {
     for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
-        for (int j = 0; i < GRAPH_DIMENSIONS; ++j) {
+        for (int j = 0; j < GRAPH_DIMENSIONS; ++j) {
             m_graph[i][j] = ' ';
         }
     }
@@ -280,7 +297,7 @@ void Axes::determineMin() {
 }
 
 void Axes::setScale() {
-    m_scale = ((fabs(m_max) + fabs(m_min)) / 51);
+    m_scale = ((fabs(m_max) + fabs(m_min)) / 50);
 }
 
 void Axes::drawAxes() {
@@ -302,5 +319,5 @@ void Axes::displayGraph() {
 */
 
 int main() {
-    Axes axes;
+    //Axes axes;
 }
