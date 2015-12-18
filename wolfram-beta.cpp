@@ -18,6 +18,7 @@
 */
 
 const int MAX_TERMS = 10;
+const int GRAPH_DIMENSIONS = 51;
 
 #include <iostream>
 #include <string>
@@ -83,7 +84,7 @@ public:
     void displayFunction();
 private:
     Term* m_terms[MAX_TERMS];
-    double m_values[51];
+    double m_values[GRAPH_DIMENSIONS];
     int m_userTerms;
     int m_nTerms;
 };
@@ -96,6 +97,7 @@ Function::Function() {
     sortTerms();
     combineLikeTerms();
     calculateValues();
+    displayFunction();
 }
 
 Function::~Function() {
@@ -123,7 +125,7 @@ void Function::takeInput() {
 }
 
 void Function::calculateValues() {
-    for (int i = 0; i < 51; ++i) {
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
         double value = 0;
         for (int j = 0; j < m_nTerms; ++j) {
             value += (m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree()));
@@ -233,45 +235,63 @@ public:
     void displayGraph();
 private:
     Function* m_function;
-    char m_graph[51][51];
+    char m_graph[GRAPH_DIMENSIONS][GRAPH_DIMENSIONS];
     double m_max;
     double m_min;
     double m_scale;
 };
 
 Axes::Axes() {
-    return;
+    m_function = new Function;
+    fillGraph();
+    
 }
 
 Axes::~Axes() {
+    delete m_function;
+}
+
+void Axes::fillGraph() {
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
+        for (int j = 0; i < GRAPH_DIMENSIONS; ++j) {
+            m_graph[i][j] = ' ';
+        }
+    }
+}
+
+void Axes::determineMax() {
+    double max = m_function->values()[0];
+    for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
+        if (m_function->values()[i] > max) {
+            max = m_function->values()[i];
+        }
+    }
+    m_max = max;
+}
+
+void Axes::determineMin() {
+    double min = m_function->values()[0];
+    for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
+        if (m_function->values()[i] < min) {
+            min = m_function->values()[i];
+        }
+    }
+    m_min = min;
+}
+
+void Axes::setScale() {
+    m_scale = ((fabs(m_max) + fabs(m_min)) / 51);
+}
+
+void Axes::drawAxes() {
     return;
 }
 
-void fillGraph() {
+void Axes::drawGraph() {
     return;
 }
 
-void determineMax() {
-    return;
-}
-
-void determineMin() {
-    return;
-}
-
-void setScale() {
-    return;
-}
-
-void drawAxes() {
-    return;
-}
-
-void drawGraph() {
-    return;
-}
-
-void displayGraph() {
+void Axes::displayGraph() {
     return;
 }
 
@@ -282,6 +302,5 @@ void displayGraph() {
 */
 
 int main() {
-    Function f;
-    f.displayFunction();
+    Axes axes;
 }
