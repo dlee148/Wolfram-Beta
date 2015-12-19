@@ -23,6 +23,7 @@ const int GRAPH_DIMENSIONS = 51;
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <ctype>
 using namespace std;
 
 /*
@@ -75,6 +76,7 @@ public:
     void takeInput();
     void sortTerms();
     void combineLikeTerms();
+    void findStartingIndex();
     void calculateValues();
     void changeAddress(int startingIndex, int endingIndex);
     // Accessors
@@ -82,20 +84,26 @@ public:
     double* values();
     int nTerms();
     void displayFunction();
+    int startingIndex();
 private:
     Term* m_terms[MAX_TERMS];
     double m_values[GRAPH_DIMENSIONS];
     int m_userTerms;
     int m_nTerms;
+    int m_startingIndex;
+    bool m_skipZero;
 };
 
 Function::Function() {
     m_nTerms = 0;
+    m_skipZero = false;
+    m_startingIndex = 0;
     cout << "How many terms are in your function? ";
     cin >> m_userTerms;
     takeInput();
     sortTerms();
     combineLikeTerms();
+    findStartingIndex();
     calculateValues();
     displayFunction();
 }
@@ -125,21 +133,7 @@ void Function::takeInput() {
 }
 
 void Function::calculateValues() {
-    int maxDegree = 0;
-    for (int k = 0; k < m_nTerms; ++k) {
-        if (fabs(terms(k)->degree()) > maxDegree) {
-            maxDegree = fabs(terms(k)->degree());
-        }
-    }
-    
-    int startingIndex = 0;
-    /*
-    
-    if maxDegree < 1 and the number after the decimal is odd, startingIndex should be 25
-    if maxDegree is negative, the number 0 should be skipped in calculations
-    
-    */
-    for (int i = startingIndex; i < GRAPH_DIMENSIONS; ++i) {
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
         double value = 0;
         for (int j = 0; j < m_nTerms; ++j) {
             value += (m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree()));
@@ -180,6 +174,27 @@ void Function::combineLikeTerms() {
                 --m_nTerms;
                 break;
             }
+        }
+    }
+}
+
+void Function::findStartingIndex() {
+    double maxDegree = 0;
+    if (m_terms[0]->degree() > m_terms[m_nTerms - 1]->degree()) {
+        maxDegree = m_terms[0]->degree();
+    }
+    else {
+        maxDegree = m_terms[m_nTerms - 1]->degree();
+    }
+    
+    if (maxDegree < 0) {
+        m_skipZero = true;
+    }
+    
+    if (maxDegree < 1) {
+        string decimal = to_string(maxDegree);
+        if ((int)decimal[decimal.length() - 1] % 2 != 0) {
+            m_startingIndex = 25;
         }
     }
 }
@@ -230,6 +245,10 @@ void Function::displayFunction() {
         }
     }
     cout << endl;
+}
+
+int Function::startingIndex() {
+    return m_startingIndex;
 }
 
 // Axes class definition and member functions
