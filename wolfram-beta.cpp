@@ -23,7 +23,7 @@ const int GRAPH_DIMENSIONS = 51;
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <ctype>
+#include <cctype>
 using namespace std;
 
 /*
@@ -133,12 +133,17 @@ void Function::takeInput() {
 }
 
 void Function::calculateValues() {
-    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
-        double value = 0;
-        for (int j = 0; j < m_nTerms; ++j) {
-            value += (m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree()));
+    for (int i = m_startingIndex; i < GRAPH_DIMENSIONS; ++i) {
+        if (m_skipZero && i == 25) {
+            continue;
         }
-        m_values[i] = value;
+        else {
+            double value = 0;
+            for (int j = 0; j < m_nTerms; ++j) {
+                    value += (m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree()));
+            }
+            m_values[i] = value;
+        }
     }
 }
 
@@ -328,7 +333,12 @@ void Axes::drawGraph() {
 }
 
 void Axes::displayGraph() {
-    return;
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
+        for (int j = 0; j < GRAPH_DIMENSIONS; ++j) {
+            cout << m_graph[i][j];
+        }
+        cout << endl;
+    }
 }
 
 /*
