@@ -325,7 +325,27 @@ void Axes::setScale() {
 }
 
 void Axes::drawAxes() {
-    return;
+    //vertical axis
+    m_graph[0][25] = '^';
+    for (int i = 1; i < GRAPH_DIMENSIONS - 1; ++i) {
+        m_graph[i][25] = '|';
+    }
+    m_graph[50][25] = 'v';
+    
+    //horizontal axis
+    double epsilon = 10000;
+    int index = 0;
+    for (int j = 0; j < GRAPH_DIMENSIONS; ++j) {
+        if (fabs(((25 - j) * m_scale) + m_min < epsilon)) {
+            epsilon = fabs(((25 - j) * m_scale) + m_min);
+            index = j;
+        }
+    }
+    m_graph[index][0] = '<';
+    for (int k = 1; k < GRAPH_DIMENSIONS - 1; ++k) {
+        m_graph[index][k] = '-';
+    }
+    m_graph[index][50] = '>';
 }
 
 void Axes::drawGraph() {
@@ -348,5 +368,5 @@ void Axes::displayGraph() {
 */
 
 int main() {
-    //Axes axes;
+    Axes axes;
 }
