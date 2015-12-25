@@ -285,7 +285,9 @@ Axes::Axes() {
     determineMax();
     determineMin();
     setScale();
-    cout << m_scale;
+    drawAxes();
+    drawGraph();
+    displayGraph();
 }
 
 Axes::~Axes() {
@@ -333,14 +335,15 @@ void Axes::drawAxes() {
     m_graph[50][25] = 'v';
     
     //horizontal axis
-    double epsilon = 10000;
     int index = 0;
-    for (int j = 0; j < GRAPH_DIMENSIONS; ++j) {
-        if (fabs(((25 - j) * m_scale) + m_min < epsilon)) {
+    double epsilon = fabs((25 * m_scale) + m_min);
+    for (int j = 1; j < GRAPH_DIMENSIONS; ++j) {
+        if (fabs(((25 - j) * m_scale) + m_min) < epsilon) {
             epsilon = fabs(((25 - j) * m_scale) + m_min);
             index = j;
         }
     }
+    index += 25;
     m_graph[index][0] = '<';
     for (int k = 1; k < GRAPH_DIMENSIONS - 1; ++k) {
         m_graph[index][k] = '-';
