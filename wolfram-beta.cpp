@@ -196,9 +196,16 @@ void Function::findStartingIndex() {
         m_skipZero = true;
     }
     
-    if (maxDegree < 1) {
+    if (maxDegree < 1 && maxDegree > 0) {
         string decimal = to_string(maxDegree);
-        if ((int)decimal[decimal.length() - 1] % 2 != 0) {
+        char lastNonzero = '\0';
+        int index = (int)decimal.length() - 1;
+        while (lastNonzero == '\0' && index >= 0) {
+            if ((int)decimal[index] != 0) {
+                lastNonzero = (char)decimal[index];
+            }
+        }
+        if ((int)lastNonzero % 2 != 0) {
             m_startingIndex = 25;
         }
     }
