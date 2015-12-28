@@ -183,6 +183,8 @@ void Function::combineLikeTerms() {
     }
 }
 
+//needs work
+
 void Function::findStartingIndex() {
     double maxDegree = 0;
     if (m_terms[0]->degree() > m_terms[m_nTerms - 1]->degree()) {
@@ -200,10 +202,11 @@ void Function::findStartingIndex() {
         string decimal = to_string(maxDegree);
         char lastNonzero = '\0';
         int index = (int)decimal.length() - 1;
-        while (lastNonzero == '\0' && index >= 0) {
+        while (index >= 2) {
             if ((int)decimal[index] != 0) {
                 lastNonzero = (char)decimal[index];
             }
+            --index;
         }
         if ((int)lastNonzero % 2 != 0) {
             m_startingIndex = 25;
@@ -310,8 +313,8 @@ void Axes::fillGraph() {
 }
 
 void Axes::determineMax() {
-    double max = m_function->values()[0];
-    for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
+    double max = m_function->values()[m_function->startingIndex()];
+    for (int i = m_function->startingIndex() + 1; i < GRAPH_DIMENSIONS; ++i) {
         if (m_function->values()[i] > max) {
             max = m_function->values()[i];
         }
@@ -320,8 +323,8 @@ void Axes::determineMax() {
 }
 
 void Axes::determineMin() {
-    double min = m_function->values()[0];
-    for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
+    double min = m_function->values()[m_function->startingIndex()];
+    for (int i = m_function->startingIndex() + 1; i < GRAPH_DIMENSIONS; ++i) {
         if (m_function->values()[i] < min) {
             min = m_function->values()[i];
         }
@@ -341,16 +344,9 @@ void Axes::drawAxes() {
     }
     m_graph[50][25] = 'v';
     
-    //horizontal axis
-    int index = 0;
-    double epsilon = fabs((25 * m_scale) + m_min);
-    for (int j = 1; j < GRAPH_DIMENSIONS; ++j) {
-        if (fabs(((25 - j) * m_scale) + m_min) < epsilon) {
-            epsilon = fabs(((25 - j) * m_scale) + m_min);
-            index = j;
-        }
-    }
-    index += 25;
+    //horizontal axis    
+    int index = round((m_min / m_scale) + 50);
+
     m_graph[index][0] = '<';
     for (int k = 1; k < GRAPH_DIMENSIONS - 1; ++k) {
         m_graph[index][k] = '-';
