@@ -355,7 +355,11 @@ void Axes::drawAxes() {
 }
 
 void Axes::drawGraph() {
-    return;
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
+        int index = round(m_function->values()[i] - (m_min / m_scale));
+        m_graph[50 - index][i] = '*';
+        
+    }
 }
 
 void Axes::displayGraph() {
