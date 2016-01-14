@@ -1,12 +1,12 @@
 #include "Function.h"
 #include "Term.h"
+#include "globals.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
 
 Function::Function() {
     m_nTerms = 0;
-    m_skipZero = false;
     m_startingIndex = 0;
     cout << "How many terms are in your function? ";
     cin >> m_userTerms;
@@ -43,7 +43,14 @@ void Function::takeInput() {
 }
 
 void Function::calculateValues() {
-    for (int i = m_startingIndex; i < GRAPH_DIMENSIONS; ++i) {
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
+        double value = 0;
+        for (int j = 0; j < m_nTerms; ++j) {
+            value += (m_terms[j]->coeff() * pow(m_startingIndex + i - 25, m_terms[j]->degree()));
+        }
+        m_values[i] = value;
+    }
+    /*for (int i = m_startingIndex; i < GRAPH_DIMENSIONS; ++i) {
         if (m_skipZero && i == 25) {
             continue;
         }
@@ -54,7 +61,7 @@ void Function::calculateValues() {
             }
             m_values[i] = value;
         }
-    }
+    }*/
 }
 
 void Function::sortTerms() {
@@ -93,35 +100,19 @@ void Function::combineLikeTerms() {
     }
 }
 
-//needs work
-
 void Function::findStartingIndex() {
-    double maxDegree = 0;
-    if (m_terms[0]->degree() > m_terms[m_nTerms - 1]->degree()) {
-        maxDegree = m_terms[0]->degree();
-    }
-    else {
-        maxDegree = m_terms[m_nTerms - 1]->degree();
-    }
-    
-    if (maxDegree < 0) {
-        m_skipZero = true;
-    }
-    
-    if (maxDegree < 1 && maxDegree > 0) {
-        string decimal = to_string(maxDegree);
-        char lastNonzero = '\0';
-        int index = (int)decimal.length() - 1;
-        while (index >= 2) {
-            if ((int)decimal[index] != 0) {
-                lastNonzero = (char)decimal[index];
-            }
-            --index;
+    for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
+        double value = 0;
+        for (int j = 0; j < m_nTerms; ++j) {
+            value += m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree());
         }
-        if ((int)lastNonzero % 2 != 0) {
-            m_startingIndex = 25;
+        if (!isnan(value)) {
+            m_startingIndex = i;
+            return;
         }
     }
+    cout << "No real values on graph." << endl;
+    exit(1);
 }
 
 void Function::changeAddress(int startingIndex, int endingIndex) {

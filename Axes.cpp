@@ -29,9 +29,9 @@ void Axes::fillGraph() {
 }
 
 void Axes::determineMax() {
-    double max = m_function->values()[m_function->startingIndex()];
-    for (int i = m_function->startingIndex() + 1; i < GRAPH_DIMENSIONS; ++i) {
-        if (m_function->values()[i] > max) {
+    double max = m_function->values()[0];
+    for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
+        if (max < m_function->values()[i]) {
             max = m_function->values()[i];
         }
     }
@@ -39,9 +39,9 @@ void Axes::determineMax() {
 }
 
 void Axes::determineMin() {
-    double min = m_function->values()[m_function->startingIndex()];
-    for (int i = m_function->startingIndex() + 1; i < GRAPH_DIMENSIONS; ++i) {
-        if (m_function->values()[i] < min) {
+    double min = m_function->values()[0];
+    for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
+        if (min > m_function->values()[i]) {
             min = m_function->values()[i];
         }
     }
@@ -54,11 +54,11 @@ void Axes::setScale() {
 
 void Axes::drawAxes() {
     //vertical axis
-    m_graph[0][25] = '^';
+    m_graph[0][25 - m_function->startingIndex()] = '^';
     for (int i = 1; i < GRAPH_DIMENSIONS - 1; ++i) {
-        m_graph[i][25] = '|';
+        m_graph[i][25 - m_function->startingIndex()] = '|';
     }
-    m_graph[50][25] = 'v';
+    m_graph[50][25 - m_function->startingIndex()] = 'v';
     
     //horizontal axis
     int index = round((m_min / m_scale) + 50);
@@ -72,9 +72,10 @@ void Axes::drawAxes() {
 
 void Axes::drawGraph() {
     for (int i = 0; i < GRAPH_DIMENSIONS; ++i) {
-        int index = round((m_function->values()[i] - m_min) / m_scale);
-        m_graph[50 - index][i] = '*';
-        
+        if (!isnan(m_function->values()[i]) && isfinite(m_function->values()[i])) {
+            int index = round((m_function->values()[i] - m_min) / m_scale);
+            m_graph[50 - index][i] = '*';
+        }
     }
 }
 

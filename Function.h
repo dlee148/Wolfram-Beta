@@ -29,7 +29,6 @@ private:
     int m_userTerms;
     int m_nTerms;
     int m_startingIndex;
-    bool m_skipZero;
 };
 
 #endif /* FUNCTION_H */

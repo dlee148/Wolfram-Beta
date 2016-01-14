@@ -15,3 +15,6 @@ Function.o: Function.cpp Function.h Term.h globals.h
 
 Term.o: Term.cpp Term.h
 	$(CXX) $(CXXFLAGS) -c Term.cpp
+
+clean:
+	\rm *.o main
