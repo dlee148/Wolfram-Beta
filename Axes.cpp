@@ -31,7 +31,7 @@ void Axes::fillGraph() {
 void Axes::determineMax() {
     double max = m_function->values()[0];
     for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
-        if (max < m_function->values()[i]) {
+        if (max < m_function->values()[i] && !isinf(m_function->values()[i]) && !isnan(m_function->values()[i])) {
             max = m_function->values()[i];
         }
     }
@@ -41,7 +41,7 @@ void Axes::determineMax() {
 void Axes::determineMin() {
     double min = m_function->values()[0];
     for (int i = 1; i < GRAPH_DIMENSIONS; ++i) {
-        if (min > m_function->values()[i]) {
+        if (min > m_function->values()[i] && !isinf(m_function->values()[i]) && !isnan(m_function->values()[i])) {
             min = m_function->values()[i];
         }
     }

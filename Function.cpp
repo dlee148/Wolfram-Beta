@@ -50,18 +50,6 @@ void Function::calculateValues() {
         }
         m_values[i] = value;
     }
-    /*for (int i = m_startingIndex; i < GRAPH_DIMENSIONS; ++i) {
-        if (m_skipZero && i == 25) {
-            continue;
-        }
-        else {
-            double value = 0;
-            for (int j = 0; j < m_nTerms; ++j) {
-                value += (m_terms[j]->coeff() * pow(i - 25, m_terms[j]->degree()));
-            }
-            m_values[i] = value;
-        }
-    }*/
 }
 
 void Function::sortTerms() {
